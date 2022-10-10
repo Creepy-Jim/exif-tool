@@ -1,5 +1,5 @@
 from cgitb import handler
-from exiftool import ExifToolHelper
+from exiftools import ExifToolHelper #type:ignore
 import argparse
 import os
 
@@ -16,6 +16,9 @@ def get_args():
                         help='Add selected info.')
     parser.add_argument('-d', '--del_info', action='store',
                         help='Remove selected info.')
+    parser.add_argument('-o','--original_info',action='store_true',help="See unformatted original\
+                        information given by the pyExifTool Library")
+    # originally args come with a Namespace, using vars() to change them into a dict. 
     parsed_args = vars(parser.parse_args())
     return parsed_args
 
@@ -28,9 +31,8 @@ def exif_process(args):
             metadata = metadata.pop(0)
             print(metadata,'\n')
             for key_entry in metadata.keys():
-                print(key_entry,' --- ',metadata[key_entry])
-    except IOError:
-        print(os.getcwd())
+                print(f"{key_entry} --- {metadata[key_entry]}")
+    except:
         print("The file is not reachable.")
 
 
