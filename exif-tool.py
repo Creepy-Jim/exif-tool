@@ -23,8 +23,12 @@ def get_args():
 def exif_process(args):
     try:
         with ExifToolHelper() as exif:
-            metadata = exif.get_metadata([args["Image Path"]])
-            print(metadata)
+            metadata = exif.get_metadata(args["Image Path"])
+            # A dirty workaround to change metadata from (a dict inside) a list to a stand along dict
+            metadata = metadata.pop(0)
+            print(metadata,'\n')
+            for key_entry in metadata.keys():
+                print(key_entry,' --- ',metadata[key_entry])
     except IOError:
         print(os.getcwd())
         print("The file is not reachable.")
@@ -32,5 +36,4 @@ def exif_process(args):
 
 if __name__ == "__main__":
     parsed_args = get_args()
-    print(parsed_args)
     exif_process(parsed_args)
